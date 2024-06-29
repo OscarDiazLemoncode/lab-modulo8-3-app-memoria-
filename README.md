@@ -1,11 +1,10 @@
-# typescript-sandbox
+# Bootcamp JS 2 - Laboratorio Módulo 8.3 - Aplicación Memoria
 
-Para la parte de cada módulo en la que te planteamos ejercicios con JavaScript puedes usar este sandbox.
+## Queremos implementar el clásico juego de las parejas ¿En que consiste esto?
 
-Pasos:
-
-- Clonate el proyecto.
-- Instala las dependencias con `npm install`.
-- Ejecuta el sandbox con `npm run dev`.
-- Abre el navegador en `http://localhost:5173/` (si ese puerto no te funciona, mira en la consola donde has hecho el build, puede que este ocupado y se haya abierto en otro puerto).
-- Puedes empezar a meter tu código en el fichero:
+- Mostramos al usuario 12 cartas boca abajo.
+- El usuario pincha en una carta y se ve el contenido de la misma (por ejemplo un gatito).
+- El usuario pincha en otra carta y se ve el contenido de la misma
+  - Si por ejemplo es un perrito, ambas cartas se ocultan y vuelta a empezar.
+  - Si es un gatito (y la carta origen era el mismo gatito), se quedan las dos cartas bocarriba y el usuario vuelve a jugar.
+- Esto así hasta que el usuario encuentre todas las parejas.
