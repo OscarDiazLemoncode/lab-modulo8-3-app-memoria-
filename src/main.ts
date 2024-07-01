@@ -20,7 +20,9 @@ const barajarCartas = () => {
   console.log(barajados);
   return barajados;
 };
-const cambiarUrlcarta = () => {
+
+const eventos = () => {
+  // Añadimos clase .voltear al click
   const img = document.querySelector('.url_carta');
   const card = document.querySelector('.card');
   if (
@@ -32,15 +34,18 @@ const cambiarUrlcarta = () => {
     img instanceof HTMLImageElement
   ) {
     card.addEventListener('click', () => {
-      img.setAttribute(
-        'src',
-        'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/1.png?raw=true'
-      );
+      setTimeout(() => {
+        // Cambiamos src de img
+        img.setAttribute(
+          'src',
+          'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/1.png?raw=true'
+        );
+      }, 300);
+      // Añadimos clase .voltear
+      card.classList.add('voltear');
     });
   }
-  console.log(img);
 };
-cambiarUrlcarta();
 
 const handlerButton = () => {
   const button = document.querySelector('.barajar');
@@ -56,5 +61,6 @@ const handlerButton = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+  eventos();
   handlerButton();
 });
