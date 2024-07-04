@@ -45,6 +45,7 @@ const eventos = () => {
   cards.forEach((card, index) => {
     // img del elemento clickado
     const imgElemento = card.querySelector('.card img');
+    console.log(index);
     card.addEventListener('click', () => {
       //const elementoClickado = e.target;
       if (
@@ -57,10 +58,6 @@ const eventos = () => {
       ) {
         // Añadimos clase .voltear
         card.classList.add('voltear');
-        //console.log(elementoClickado);
-        console.log(card);
-        console.log(imgElemento);
-        console.log(index);
         switch (index) {
           case 0:
             console.log('click en el 1º');
