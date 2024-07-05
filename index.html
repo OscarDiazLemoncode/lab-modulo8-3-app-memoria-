@@ -4,33 +4,16 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <link rel="stylesheet" href="./src/style.css" />
+    <title>App memoria</title>
   </head>
   <body>
     <section>
       <h1>Aplicación memoria</h1>
-      <div class="grid_cards">
-        <div class="card">
-          <div class="back">
-            <img
-              class="url_carta"
-              src="https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/1.png?raw=true"
-              alt=""
-            />
-          </div>
-        </div>
-        <div class="card">
-          <div class="back">
-            <img
-              class="url_carta"
-              src="https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/2.png?raw=true"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
+      <button class="empezar_partida">JUGAR</button>
+      <div class="grid_cards pvm"></div>
     </section>
-    <button class="barajar">Barajar</button>
-    <script type="module" src="/src/main.ts"></script>
+    <button class="barajar">Jugar de Nuevo</button>
+    <script type="module" src="./src/main.ts"></script>
   </body>
 </html>

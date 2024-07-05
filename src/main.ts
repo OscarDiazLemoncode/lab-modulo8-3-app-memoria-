@@ -1,105 +1,134 @@
-import './style.css';
-
 /* interface Carta {
     idFoto: number;
     imagen:string;
     estaVuelta: boolean;
     encontrada:boolean;
 } */
-/* interface InfoCarta {
-    idFoto:number;
-    imagen:string;
+interface InfoCarta {
+  idFoto: number;
+  imagen: string;
 }
- */
 
-const barajarCartas = () => {
-  const ids = [1, 2, 3, 4, 5, 6];
-  const idsCartas = [...ids, ...ids];
-  console.log(idsCartas);
-  const barajados = idsCartas.sort(() => Math.random() - 0.5);
-  console.log(barajados);
-  return barajados;
-};
-/* const eventos = () => {
-  const cards = document.querySelectorAll('.card');
-  cards.forEach((card) => {
-    card.addEventListener('click', (e) => {
-      const elementoClickado = e.target;
-      if (elementoClickado instanceof HTMLImageElement) {
-        // El elemento clicado es una <img>
-        console.log('Elemento <img> clicado:', elementoClickado);
-      } else {
-        // Si el clic no fue directamente en una <img>, busca dentro del .card
-        const imgElement = card.querySelector('img');
-        if (imgElement) {
-          console.log('Elemento <img> dentro del .card:', imgElement);
-        }
-      }
-    });
-  });
-}; */
-const eventos = () => {
-  // Añadimos clase .voltear
-  const cards = document.querySelectorAll('.card');
-  //const imgCard = document.querySelector('.card img');
-  cards.forEach((card, index) => {
-    // img del elemento clickado
-    const imgElemento = card.querySelector('.card img');
-    console.log(index);
-    card.addEventListener('click', () => {
-      //const elementoClickado = e.target;
-      if (
-        card !== null &&
-        card !== undefined &&
-        card instanceof HTMLDivElement &&
-        imgElemento !== null &&
-        imgElemento !== undefined &&
-        imgElemento instanceof HTMLImageElement
-      ) {
-        // Añadimos clase .voltear
-        card.classList.add('voltear');
-        switch (index) {
-          case 0:
-            console.log('click en el 1º');
-            imgElemento.src =
-              'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/3.png?raw=true';
-
-            break;
-          case 1:
-            console.log('click en el 2º');
-            imgElemento.src =
-              'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/4.png?raw=true';
-            break;
-          default:
-            break;
-        }
-      } else {
-        console.warn('No se ha modificado el src de la imagen');
-      }
-    });
-  });
+const infoCartas: InfoCarta[] = [
+  {
+    idFoto: 1,
+    imagen:
+      'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/1.png?raw=true',
+  },
+  {
+    idFoto: 2,
+    imagen:
+      'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/2.png?raw=true',
+  },
+  {
+    idFoto: 3,
+    imagen:
+      'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/3.png?raw=true',
+  },
+  {
+    idFoto: 4,
+    imagen:
+      'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/4.png?raw=true',
+  },
+  {
+    idFoto: 5,
+    imagen:
+      'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/5.png?raw=true',
+  },
+  {
+    idFoto: 6,
+    imagen:
+      'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/6.png?raw=true',
+  },
+];
+// Duplicamos el array original de forma inmutable
+const duplicarInfoCartas = (infoCartas: InfoCarta[]): InfoCarta[] => {
+  const infoCartasDuplicado: InfoCarta[] = [...infoCartas, ...infoCartas];
+  return infoCartasDuplicado;
 };
 
-/* const cambiarSrcImg = () => {
-  const imgs = document.querySelectorAll('.card img');
-  let src: string = '';
-  imgs.forEach((img) => {
-    if (img !== null && img !== undefined && img instanceof HTMLImageElement) {
-      src = img.src;
-      console.log(src);
-    }
-  });
-  return src;
-}; */
+//Barajamos array duplicado
+const barajamosInfoCartasDuplicadas = (
+  infoCartasDuplicadas: InfoCarta[]
+): InfoCarta[] => {
+  const barajadoInfoCartasDuplicadas = infoCartasDuplicadas.sort(
+    () => Math.random() - 0.5
+  );
+  return barajadoInfoCartasDuplicadas;
+};
 
-/* imgs.forEach((img) => {
-      img.setAttribute(
-        'src',
-        'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/3.png?raw=true'
+// Creamos div.card por cada carta del array
+const crearDivCarta = (infoCartasBarajadas: InfoCarta[]) => {
+  const gridCartas = document.querySelector('.grid_cards');
+  if (
+    gridCartas !== null &&
+    gridCartas !== undefined &&
+    gridCartas instanceof HTMLDivElement
+  ) {
+    infoCartasBarajadas.forEach((carta) => {
+      // Creamos div por cada carta del array
+      const divCard = document.createElement('div');
+      divCard.classList.add('card');
+      // Cramos dentro de .card el div.back que contiene la img
+      const divBack = document.createElement('div');
+      divBack.classList.add('back');
+      // Creamos el img dentro de .back
+      const imgCard = document.createElement('img');
+      // Creamos estructura de la card
+      gridCartas.appendChild(divCard);
+      divCard.appendChild(divBack);
+      divBack.appendChild(imgCard);
+      //imgCard.src = carta.imagen;
+
+      // Obtenemos index de cada carta del array
+      const index = infoCartasBarajadas.findIndex(
+        (elemento) => elemento.idFoto === carta.idFoto
       );
-    }); */
+      // Convertimos a string el indice
+      const indexParseado: string = index.toString();
 
-const handlerButton = () => {
+      // Asignamos el index string como atributo a cada card
+      divCard.setAttribute('data-index', indexParseado);
+
+      // Asignamos el index string como atributo a img dentro de .card
+      imgCard.setAttribute('data-index', indexParseado);
+
+      // Evento click sobre cada card
+      divCard.addEventListener('click', () => {
+        // Añadimos clase .voltear a cada card
+        divCard.classList.add('voltear');
+        const indexCard = divCard.getAttribute('data-index');
+        const indexImgCard = imgCard.getAttribute('data-index');
+        imgCard.src = carta.imagen;
+        console.log(indexCard);
+        console.log(indexImgCard);
+        console.log(divCard);
+      });
+    });
+  }
+};
+// Btn empezar partida
+const empezarPartida = (): void => {
+  const btnEmpezarPartida = document.querySelector('.empezar_partida');
+  if (
+    btnEmpezarPartida !== null &&
+    btnEmpezarPartida !== undefined &&
+    btnEmpezarPartida instanceof HTMLButtonElement
+  ) {
+    btnEmpezarPartida.addEventListener('click', () => {
+      const infoCartasDuplicadas = duplicarInfoCartas(infoCartas);
+      const crearColeccionDeCartasInicial =
+        barajamosInfoCartasDuplicadas(infoCartasDuplicadas);
+      console.table(crearColeccionDeCartasInicial);
+      crearDivCarta(crearColeccionDeCartasInicial);
+      // Mostramos botón reiniciar partida
+      reiniciarPartida();
+    });
+  }
+};
+
+// Btn reiniciar partida
+const reiniciarPartida = (): void => {
   const button = document.querySelector('.barajar');
   if (
     button !== null &&
@@ -107,31 +136,16 @@ const handlerButton = () => {
     button instanceof HTMLButtonElement
   ) {
     button.addEventListener('click', () => {
-      barajarCartas();
+      window.location.reload();
     });
   }
 };
 
+// Eventos
+const eventos = (): void => {
+  empezarPartida();
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   eventos();
-  handlerButton();
 });
-
-/* const eventos = () => {
-  const cards = document.querySelectorAll('.card');
-  cards.forEach((card) => {
-    card.addEventListener('click', (e) => {
-      const elementoClickado = e.target;
-      if (elementoClickado instanceof HTMLImageElement) {
-        // El elemento clicado es una <img>
-        console.log('Elemento <img> clicado:', elementoClickado);
-      } else {
-        // Si el clic no fue directamente en una <img>, busca dentro del .card
-        const imgElement = card.querySelector('img');
-        if (imgElement) {
-          console.log('Elemento <img> dentro del .card:', imgElement);
-        }
-      }
-    });
-  });
-}; */
