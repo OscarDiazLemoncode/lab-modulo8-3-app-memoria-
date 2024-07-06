@@ -1,9 +1,9 @@
 import { crearColeccionDeCartasInicial, infoCartas } from './model';
-import { barajamosColeccionDeCartas } from './motor';
+import { barajamosColeccionDeCartas, eventos } from './motor';
 
 document.addEventListener('DOMContentLoaded', () => {
-  //eventos();
+  eventos();
   const coleccionDeCartasInicial = crearColeccionDeCartasInicial(infoCartas);
   barajamosColeccionDeCartas(coleccionDeCartasInicial);
+  console.table(barajamosColeccionDeCartas(coleccionDeCartasInicial));
 });
-console.log('ui');

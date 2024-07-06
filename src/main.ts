@@ -1,5 +1,4 @@
-import { InfoCarta, infoCartas, crearColeccionDeCartasInicial } from './model';
-
+import './shell';
 // Duplicamos el array original de forma inmutable
 /* const duplicarInfoCartas = (infoCartas: InfoCarta[]): InfoCarta[] => {
   const infoCartasDuplicado: InfoCarta[] = [...infoCartas, ...infoCartas];
@@ -17,7 +16,7 @@ import { InfoCarta, infoCartas, crearColeccionDeCartasInicial } from './model';
 }; */
 
 // Creamos div.card por cada carta del array
-const crearDivCarta = (infoCartasBarajadas: InfoCarta[]) => {
+/* const crearDivCarta = (infoCartasBarajadas: InfoCarta[]) => {
   const gridCartas = document.querySelector('.grid_cards');
   if (
     gridCartas !== null &&
@@ -65,9 +64,9 @@ const crearDivCarta = (infoCartasBarajadas: InfoCarta[]) => {
       });
     });
   }
-};
+}; */
 // Btn empezar partida
-const empezarPartida = (): void => {
+/* const empezarPartida = (): void => {
   const btnEmpezarPartida = document.querySelector('.empezar_partida');
   if (
     btnEmpezarPartida !== null &&
@@ -77,10 +76,8 @@ const empezarPartida = (): void => {
     btnEmpezarPartida.addEventListener('click', () => {
       const coleccionDeCartasInicial =
         crearColeccionDeCartasInicial(infoCartas);
-      /* const barajadoColeccionDeCartas = barajamosColeccionDeCartas(
-        coleccionDeCartasInicial
-      ); */
-      crearDivCarta(coleccionDeCartasInicial);
+      //const barajadoColeccionDeCartas = barajamosColeccionDeCartas(coleccionDeCartasInicial);
+      //crearDivCarta(coleccionDeCartasInicial);
       //console.table(coleccionDeCartasInicial);
       // Mostramos botón reiniciar partida
       reiniciarPartida();
@@ -88,10 +85,10 @@ const empezarPartida = (): void => {
   } else {
     console.warn('No se iniciado la partida');
   }
-};
+}; */
 
 // Btn reiniciar partida
-const reiniciarPartida = (): void => {
+/* const reiniciarPartida = (): void => {
   const button = document.querySelector('.barajar');
   if (
     button !== null &&
@@ -102,13 +99,13 @@ const reiniciarPartida = (): void => {
       window.location.reload();
     });
   }
-};
+}; */
 
 // Eventos
-const eventos = (): void => {
+/* const eventos = (): void => {
   empezarPartida();
-};
+}; */
 
-document.addEventListener('DOMContentLoaded', () => {
+/* document.addEventListener('DOMContentLoaded', () => {
   eventos();
-});
+}); */

@@ -58,17 +58,3 @@ export const crearColeccionDeCartasInicial = (infoCartas: InfoCarta[]) => {
 };
 
 //export let cartas: Carta[] = crearColeccionDeCartasInicial(infoCartas);
-
-//Barajamos array duplicado
-/* export const barajamosColeccionDeCartas = (
-  coleccionDeCartasInicial: InfoCarta[]
-): InfoCarta[] => {
-  const barajadoColeccionDeCartas = coleccionDeCartasInicial.sort(
-    () => Math.random() - 0.5
-  );
-  console.table(barajadoColeccionDeCartas);
-  return barajadoColeccionDeCartas;
-};
-const coleccionDeCartasInicial = crearColeccionDeCartasInicial(infoCartas);
-barajamosColeccionDeCartas(coleccionDeCartasInicial); */
-console.log('modelo');
