@@ -1,61 +1,20 @@
-/* interface Carta {
-    idFoto: number;
-    imagen:string;
-    estaVuelta: boolean;
-    encontrada:boolean;
-} */
-interface InfoCarta {
-  idFoto: number;
-  imagen: string;
-}
+import { InfoCarta, infoCartas, crearColeccionDeCartasInicial } from './model';
 
-const infoCartas: InfoCarta[] = [
-  {
-    idFoto: 1,
-    imagen:
-      'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/1.png?raw=true',
-  },
-  {
-    idFoto: 2,
-    imagen:
-      'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/2.png?raw=true',
-  },
-  {
-    idFoto: 3,
-    imagen:
-      'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/3.png?raw=true',
-  },
-  {
-    idFoto: 4,
-    imagen:
-      'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/4.png?raw=true',
-  },
-  {
-    idFoto: 5,
-    imagen:
-      'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/5.png?raw=true',
-  },
-  {
-    idFoto: 6,
-    imagen:
-      'https://github.com/Lemoncode/fotos-ejemplos/blob/main/memo/6.png?raw=true',
-  },
-];
 // Duplicamos el array original de forma inmutable
-const duplicarInfoCartas = (infoCartas: InfoCarta[]): InfoCarta[] => {
+/* const duplicarInfoCartas = (infoCartas: InfoCarta[]): InfoCarta[] => {
   const infoCartasDuplicado: InfoCarta[] = [...infoCartas, ...infoCartas];
   return infoCartasDuplicado;
-};
+}; */
 
 //Barajamos array duplicado
-const barajamosInfoCartasDuplicadas = (
+/* const barajamosInfoCartasDuplicadas = (
   infoCartasDuplicadas: InfoCarta[]
 ): InfoCarta[] => {
   const barajadoInfoCartasDuplicadas = infoCartasDuplicadas.sort(
     () => Math.random() - 0.5
   );
   return barajadoInfoCartasDuplicadas;
-};
+}; */
 
 // Creamos div.card por cada carta del array
 const crearDivCarta = (infoCartasBarajadas: InfoCarta[]) => {
@@ -116,14 +75,18 @@ const empezarPartida = (): void => {
     btnEmpezarPartida instanceof HTMLButtonElement
   ) {
     btnEmpezarPartida.addEventListener('click', () => {
-      const infoCartasDuplicadas = duplicarInfoCartas(infoCartas);
-      const crearColeccionDeCartasInicial =
-        barajamosInfoCartasDuplicadas(infoCartasDuplicadas);
-      console.table(crearColeccionDeCartasInicial);
-      crearDivCarta(crearColeccionDeCartasInicial);
+      const coleccionDeCartasInicial =
+        crearColeccionDeCartasInicial(infoCartas);
+      /* const barajadoColeccionDeCartas = barajamosColeccionDeCartas(
+        coleccionDeCartasInicial
+      ); */
+      crearDivCarta(coleccionDeCartasInicial);
+      //console.table(coleccionDeCartasInicial);
       // Mostramos botón reiniciar partida
       reiniciarPartida();
     });
+  } else {
+    console.warn('No se iniciado la partida');
   }
 };
 
