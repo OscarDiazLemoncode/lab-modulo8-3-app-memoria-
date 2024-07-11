@@ -1,26 +1,26 @@
-import { InfoCarta, crearColeccionDeCartasInicial, infoCartas } from './model';
+import { cartas, Carta } from './model';
 
 //Barajamos array duplicado
-export const barajamosColeccionDeCartas = (
-  coleccionDeCartasInicial: InfoCarta[]
-): InfoCarta[] => {
-  const barajadoColeccionDeCartas = coleccionDeCartasInicial.sort(
-    () => Math.random() - 0.5
-  );
+const barajarCartas = (cartas: Carta[]): Carta[] => {
+  const barajadoColeccionDeCartas = cartas.sort(() => Math.random() - 0.5);
   return barajadoColeccionDeCartas;
 };
+export const cartasBarajadas = barajarCartas(cartas);
+console.table(cartasBarajadas);
 
-/* //////////////////////////////////////////////////////////// */
-// Creamos div.card por cada carta del array
-export const crearDivCarta = (infoCartasBarajadas: InfoCarta[]) => {
+// Una carta se puede voltear si no está encontrada y no está ya volteada, o no hay dos cartas ya volteadas
+/* const sePuedeVoltearLaCarta = (tablero: Tablero, indice: number ): boolean => {
+} */
+
+export const crearDivsDeCarta = (cartasBarajadas: Carta[]): Carta[] => {
   const gridCartas = document.querySelector('.grid_cards');
+  let divsDeCartas: Carta[] = [];
   if (
     gridCartas !== null &&
     gridCartas !== undefined &&
     gridCartas instanceof HTMLDivElement
   ) {
-    infoCartasBarajadas.forEach((carta) => {
-      // Creamos div por cada carta del array
+    cartasBarajadas.forEach((carta) => {
       const divCard = document.createElement('div');
       divCard.classList.add('card');
       // Cramos dentro de .card el div.back que contiene la img
@@ -28,26 +28,21 @@ export const crearDivCarta = (infoCartasBarajadas: InfoCarta[]) => {
       divBack.classList.add('back');
       // Creamos el img dentro de .back
       const imgCard = document.createElement('img');
+      // Obtenemos index de cada carta del array
+      const index = cartasBarajadas.findIndex(
+        (card) => card.idFoto === carta.idFoto
+      );
+      // Convertimos a string el indice
+      const indexParseado: string = index.toString();
+      // Asignamos el index string como atributo a cada card
+      divCard.setAttribute('data-index', indexParseado);
+      // Asignamos el index string como atributo a img dentro de .card
+      imgCard.setAttribute('data-index', indexParseado);
       // Creamos estructura de la card
       gridCartas.appendChild(divCard);
       divCard.appendChild(divBack);
       divBack.appendChild(imgCard);
-      //imgCard.src = carta.imagen;
 
-      // Obtenemos index de cada carta del array
-      const index = infoCartasBarajadas.findIndex(
-        (elemento) => elemento.idFoto === carta.idFoto
-      );
-      // Convertimos a string el indice
-      const indexParseado: string = index.toString();
-
-      // Asignamos el index string como atributo a cada card
-      divCard.setAttribute('data-index', indexParseado);
-
-      // Asignamos el index string como atributo a img dentro de .card
-      imgCard.setAttribute('data-index', indexParseado);
-
-      // Evento click sobre cada card
       divCard.addEventListener('click', () => {
         // Añadimos clase .voltear a cada card
         divCard.classList.add('voltear');
@@ -59,8 +54,12 @@ export const crearDivCarta = (infoCartasBarajadas: InfoCarta[]) => {
         console.log(divCard);
       });
     });
+  } else {
+    console.warn('No se ha creado la estructura de las cartas');
   }
+  return divsDeCartas;
 };
+
 // Btn empezar partida
 export const empezarPartida = (): void => {
   const btnEmpezarPartida = document.querySelector('.empezar_partida');
@@ -70,13 +69,7 @@ export const empezarPartida = (): void => {
     btnEmpezarPartida instanceof HTMLButtonElement
   ) {
     btnEmpezarPartida.addEventListener('click', () => {
-      const coleccionDeCartasInicial =
-        crearColeccionDeCartasInicial(infoCartas);
-      /* const barajadoColeccionDeCartas = barajamosColeccionDeCartas(
-        coleccionDeCartasInicial
-      ); */
-      crearDivCarta(coleccionDeCartasInicial);
-      //console.table(coleccionDeCartasInicial);
+      crearDivsDeCarta(cartasBarajadas);
       // Mostramos botón reiniciar partida
       reiniciarPartida();
     });
