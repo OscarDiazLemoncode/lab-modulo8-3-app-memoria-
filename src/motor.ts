@@ -1,4 +1,4 @@
-import { cartas, Carta } from './model';
+import { cartas, Carta, tablero } from './model';
 
 //Barajamos array duplicado
 const barajarCartas = (cartas: Carta[]): Carta[] => {
@@ -9,6 +9,7 @@ export const cartasBarajadas = barajarCartas(cartas);
 console.table(cartasBarajadas);
 
 // Una carta se puede voltear si no está encontrada y no está ya volteada, o no hay dos cartas ya volteadas
+//TODO {...}
 //const sePuedeVoltearLaCarta = (tablero: Tablero, indice: number): boolean => {};
 
 // Obtener indice de cada carta
@@ -55,7 +56,7 @@ export const crearDivsDeCarta = (cartasBarajadas: Carta[]): Carta[] => {
       // Evento click sobre cada card
       divCard.addEventListener('click', () => {
         // Añadimos clase .voltear a cada card
-        divCard.classList.add('voltear');
+        //divCard.classList.add('voltear');
         const indexCard = divCard.getAttribute('data-index');
         const indexImgCard = imgCard.getAttribute('data-index');
         imgCard.src = carta.imagen;
@@ -72,7 +73,7 @@ export const crearDivsDeCarta = (cartasBarajadas: Carta[]): Carta[] => {
 };
 
 // Btn empezar partida
-export const empezarPartida = (): void => {
+/* export const empezarPartida = (): void => {
   const btnEmpezarPartida = document.querySelector('.empezar_partida');
   if (
     btnEmpezarPartida !== null &&
@@ -87,17 +88,32 @@ export const empezarPartida = (): void => {
   } else {
     console.warn('No se iniciado la partida');
   }
+}; */
+
+// Cambia estado de la partida al iniciar la partida
+const empezarPartida = (): void => {
+  const btnEmpezarPartida = document.querySelector('.empezar_partida');
+  if (btnEmpezarPartida && btnEmpezarPartida instanceof HTMLButtonElement) {
+    btnEmpezarPartida.addEventListener('click', () => {
+      tablero.estadoPartida = 'CeroCartasLevantadas';
+      reiniciarPartida();
+      console.warn(tablero);
+    });
+  } else {
+    throw new Error('No se ha modificado el estado de la partida');
+  }
 };
 
 // Btn reiniciar partida
 export const reiniciarPartida = (): void => {
-  const button = document.querySelector('.barajar');
+  const btnReiniciarPartida = document.querySelector('.reiniciar_partida');
   if (
-    button !== null &&
-    button !== undefined &&
-    button instanceof HTMLButtonElement
+    btnReiniciarPartida !== null &&
+    btnReiniciarPartida !== undefined &&
+    btnReiniciarPartida instanceof HTMLButtonElement
   ) {
-    button.addEventListener('click', () => {
+    btnReiniciarPartida.classList.remove('hidden');
+    btnReiniciarPartida.addEventListener('click', () => {
       window.location.reload();
     });
   }
@@ -105,5 +121,6 @@ export const reiniciarPartida = (): void => {
 
 // Eventos
 export const eventos = (): void => {
+  crearDivsDeCarta(cartasBarajadas);
   empezarPartida();
 };
