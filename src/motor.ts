@@ -15,14 +15,24 @@ console.table(cartasBarajadas);
 // Obtener indice de cada carta
 const indiceCarta = (cartasBarajadas: Carta[]): number[] => {
   let indices = cartasBarajadas.map((_carta, index) => {
-    console.log(`index${index}`);
+    //console.log(`index${index}`);
     return index;
   });
-  console.log(`index${indices}`);
+  //console.log(`index${indices}`);
   return indices;
 };
 const indiceCard = indiceCarta(cartasBarajadas);
 console.log(indiceCard);
+
+const crearDiv = (): HTMLDivElement => {
+  const div = document.createElement('div');
+  return div;
+};
+
+const crearImg = (): HTMLImageElement => {
+  const img = document.createElement('img');
+  return img;
+};
 
 export const crearDivsDeCarta = (cartasBarajadas: Carta[]): Carta[] => {
   const gridCartas = document.querySelector('.grid_cards');
@@ -38,13 +48,13 @@ export const crearDivsDeCarta = (cartasBarajadas: Carta[]): Carta[] => {
       // Obetenemos indice de cada carta y lo convertimos a string
       indiceCarta = index.toString();
       // Creamos un div por cada carta
-      const divCard = document.createElement('div');
+      const divCard = crearDiv();
       divCard.classList.add('card');
       // Creamos dentro de .card el div.back que contiene la img
-      const divBack = document.createElement('div');
+      const divBack = crearDiv();
       divBack.classList.add('back');
       // Creamos el img dentro de .back
-      const imgCard = document.createElement('img');
+      const imgCard = crearImg();
       // Asignamos el index string como atributo a cada card
       divCard.setAttribute('data-index', indiceCarta);
       // Asignamos el index string como atributo a img dentro de .card
@@ -67,7 +77,7 @@ export const crearDivsDeCarta = (cartasBarajadas: Carta[]): Carta[] => {
       /*  */
     });
   } else {
-    console.warn('No se ha creado la estructura de las cartas');
+    throw new Error('No se ha creado la estructura de las cartas');
   }
   return barajaDeCartasInicial;
 };
@@ -90,12 +100,24 @@ export const crearDivsDeCarta = (cartasBarajadas: Carta[]): Carta[] => {
   }
 }; */
 
+// Habilitar click en cartas una vez iniciada la partida
+const habilitarCartas = (): void => {
+  const gridCartas = document.querySelector('.grid_cards');
+  const error = () => {
+    throw new Error('No se han habilitado las cartas');
+  };
+  gridCartas && gridCartas instanceof HTMLDivElement
+    ? gridCartas.classList.remove('unstarted')
+    : error();
+};
+
 // Cambia estado de la partida al iniciar la partida
 const empezarPartida = (): void => {
   const btnEmpezarPartida = document.querySelector('.empezar_partida');
   if (btnEmpezarPartida && btnEmpezarPartida instanceof HTMLButtonElement) {
     btnEmpezarPartida.addEventListener('click', () => {
       tablero.estadoPartida = 'CeroCartasLevantadas';
+      habilitarCartas();
       reiniciarPartida();
       console.warn(tablero);
     });
