@@ -1,4 +1,4 @@
-import { cartas, Carta, tablero } from './model';
+import { cartas, Carta, tablero, Tablero } from './model';
 
 //Barajamos array duplicado
 const barajarCartas = (cartas: Carta[]): Carta[] => {
@@ -9,8 +9,20 @@ export const cartasBarajadas = barajarCartas(cartas);
 console.table(cartasBarajadas);
 
 // Una carta se puede voltear si no está encontrada y no está ya volteada, o no hay dos cartas ya volteadas
-//TODO {...}
-//const sePuedeVoltearLaCarta = (tablero: Tablero, indice: number): boolean => {};
+// ¿Para que pasamos el indice aqui?
+const sePuedeVoltearLaCarta = (tablero: Tablero): boolean => {
+  const cartas = tablero.cartas;
+  const cartasVolteadas = cartas.filter((carta) => carta.estaVuelta).length;
+  // Verificamos si no hay dos cartas volteadas
+  const noHayDosCartasVolteadas = cartasVolteadas < 2;
+  // Verificamos si la carta no está encontrada y no está volteada
+  const cartaNoEncontradaYNoVolteada = cartas.every(
+    (carta) => !carta.encontrada && !carta.estaVuelta
+  );
+  console.warn(cartaNoEncontradaYNoVolteada && noHayDosCartasVolteadas);
+  return cartaNoEncontradaYNoVolteada && noHayDosCartasVolteadas;
+};
+sePuedeVoltearLaCarta(tablero);
 
 // Obtener indice de cada carta
 const indiceCarta = (cartasBarajadas: Carta[]): number[] => {
@@ -34,7 +46,7 @@ const crearImg = (): HTMLImageElement => {
   return img;
 };
 
-export const crearDivsDeCarta = (cartasBarajadas: Carta[]): Carta[] => {
+export const crearTableroConCartas = (cartasBarajadas: Carta[]): Carta[] => {
   const gridCartas = document.querySelector('.grid_cards');
   let barajaDeCartasInicial: Carta[] = [];
   let indiceCarta: string;
@@ -66,7 +78,7 @@ export const crearDivsDeCarta = (cartasBarajadas: Carta[]): Carta[] => {
       // Evento click sobre cada card
       divCard.addEventListener('click', () => {
         // Añadimos clase .voltear a cada card
-        //divCard.classList.add('voltear');
+        divCard.classList.add('voltear');
         const indexCard = divCard.getAttribute('data-index');
         const indexImgCard = imgCard.getAttribute('data-index');
         imgCard.src = carta.imagen;
@@ -143,6 +155,7 @@ export const reiniciarPartida = (): void => {
 
 // Eventos
 export const eventos = (): void => {
-  crearDivsDeCarta(cartasBarajadas);
+  crearTableroConCartas(cartasBarajadas);
   empezarPartida();
+  console.warn(tablero);
 };

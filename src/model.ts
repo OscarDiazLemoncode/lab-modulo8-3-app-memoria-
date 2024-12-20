@@ -89,4 +89,4 @@ const crearTableroInicial = (): Tablero => ({
   estadoPartida: 'PartidaNoIniciada',
 });
 export let tablero: Tablero = crearTableroInicial();
-//console.log(tablero);
+console.log(tablero);
