@@ -8,21 +8,45 @@ const barajarCartas = (cartas: Carta[]): Carta[] => {
 export const cartasBarajadas = barajarCartas(cartas);
 console.table(cartasBarajadas);
 
+// Obtenemos el indice de la carta
+/* const obtenerIndiceCarta = (tablero: Tablero, cartaBuscada: Carta): number => {
+  return tablero.cartas.findIndex((carta) => carta === cartaBuscada);
+};
+const indice = obtenerIndiceCarta(tablero, tablero.cartas[0]); */
+/*  */
+/* const indiceCarta = (tablero: Tablero, cartaBuscada: Carta): number => {
+  const indice = tablero.cartas.findIndex(
+    (carta) =>
+      carta.estaVuelta === cartaBuscada.estaVuelta &&
+      carta.encontrada === cartaBuscada.encontrada
+  );
+  return indice;
+};
+const indice = indiceCarta(tablero, tablero.cartas[0]);
+console.warn(indice); */
+
 // Una carta se puede voltear si no está encontrada y no está ya volteada, o no hay dos cartas ya volteadas
-// ¿Para que pasamos el indice aqui?
-const sePuedeVoltearLaCarta = (tablero: Tablero): boolean => {
+const sePuedeVoltearLaCarta = (tablero: Tablero, indice: number): boolean => {
   const cartas = tablero.cartas;
   const cartasVolteadas = cartas.filter((carta) => carta.estaVuelta).length;
   // Verificamos si no hay dos cartas volteadas
   const noHayDosCartasVolteadas = cartasVolteadas < 2;
   // Verificamos si la carta no está encontrada y no está volteada
-  const cartaNoEncontradaYNoVolteada = cartas.every(
-    (carta) => !carta.encontrada && !carta.estaVuelta
-  );
-  console.warn(cartaNoEncontradaYNoVolteada && noHayDosCartasVolteadas);
+  const carta = cartas[indice];
+  const cartaNoEncontradaYNoVolteada = !carta.encontrada && !carta.estaVuelta;
+  // console.warn(cartaNoEncontradaYNoVolteada && noHayDosCartasVolteadas);
   return cartaNoEncontradaYNoVolteada && noHayDosCartasVolteadas;
 };
-sePuedeVoltearLaCarta(tablero);
+// sePuedeVoltearLaCarta(tablero, indice);
+// TODO
+/* const voltearLaCarta = (tablero: Tablero, indice: number): void => {
+  if (sePuedeVoltearLaCarta(tablero, indice)) {
+    console.warn('Se puede voltear la carta');
+  } else {
+    console.warn('No se puede voltear la carta');
+  }
+};
+voltearLaCarta(tablero, indice); */
 
 // Obtener indice de cada carta
 const indiceCarta = (cartasBarajadas: Carta[]): number[] => {
@@ -77,14 +101,19 @@ export const crearTableroConCartas = (cartasBarajadas: Carta[]): Carta[] => {
       divBack.appendChild(imgCard);
       // Evento click sobre cada card
       divCard.addEventListener('click', () => {
-        // Añadimos clase .voltear a cada card
-        divCard.classList.add('voltear');
-        const indexCard = divCard.getAttribute('data-index');
-        const indexImgCard = imgCard.getAttribute('data-index');
-        imgCard.src = carta.imagen;
-        console.log(indexCard);
-        console.log(indexImgCard);
-        console.log(divCard);
+        if (
+          sePuedeVoltearLaCarta(tablero, index) &&
+          tablero.estadoPartida === 'CeroCartasLevantadas'
+        ) {
+          // Añadimos clase .voltear a cada card
+          divCard.classList.add('voltear');
+          const indexCard = divCard.getAttribute('data-index');
+          const indexImgCard = imgCard.getAttribute('data-index');
+          imgCard.src = carta.imagen;
+          console.log(indexCard);
+          console.log(indexImgCard);
+          console.log(divCard);
+        }
       });
       /*  */
     });
@@ -153,9 +182,19 @@ export const reiniciarPartida = (): void => {
   }
 };
 
+// Mostrar mensaje de iniciar partida
+/* const avisoIniciarPartida = (): void => {
+  const gridCartas = document.querySelector('.grid_cards');
+  if (gridCartas && gridCartas instanceof HTMLDivElement) {
+    gridCartas.addEventListener('mouseover', () => {
+      console.log('Hay que iniciar partida primero');
+    });
+  }
+};
+avisoIniciarPartida(); */
 // Eventos
 export const eventos = (): void => {
   crearTableroConCartas(cartasBarajadas);
-  empezarPartida();
-  console.warn(tablero);
+  tablero.estadoPartida === 'PartidaNoIniciada' ? empezarPartida() : null;
 };
+console.warn(tablero);

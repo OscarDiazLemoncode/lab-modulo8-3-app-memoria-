@@ -109,3 +109,56 @@ import './shell';
 /* document.addEventListener('DOMContentLoaded', () => {
   eventos();
 }); */
+
+// export const crearTableroConCartas = (cartasBarajadas: Carta[]): Carta[] => {
+//   const gridCartas = document.querySelector('.grid_cards');
+//   let barajaDeCartasInicial: Carta[] = [];
+//   let indiceCarta: string;
+//   if (
+//     gridCartas !== null &&
+//     gridCartas !== undefined &&
+//     gridCartas instanceof HTMLDivElement
+//   ) {
+//     cartasBarajadas.map((carta, index) => {
+//       /*  */
+//       // Obetenemos indice de cada carta y lo convertimos a string
+//       indiceCarta = index.toString();
+//       // Creamos un div por cada carta
+//       const divCard = crearDiv();
+//       divCard.classList.add('card');
+//       // Creamos dentro de .card el div.back que contiene la img
+//       const divBack = crearDiv();
+//       divBack.classList.add('back');
+//       // Creamos el img dentro de .back
+//       const imgCard = crearImg();
+//       // Asignamos el index string como atributo a cada card
+//       divCard.setAttribute('data-index', indiceCarta);
+//       // Asignamos el index string como atributo a img dentro de .card
+//       imgCard.setAttribute('data-index', indiceCarta);
+//       // Creamos estructura de la card
+//       gridCartas.appendChild(divCard);
+//       divCard.appendChild(divBack);
+//       divBack.appendChild(imgCard);
+//       // Evento click sobre cada card
+//       divCard.addEventListener('click', () => {
+//         if (
+//           sePuedeVoltearLaCarta(tablero, index) &&
+//           tablero.estadoPartida === 'CeroCartasLevantadas'
+//         ) {
+//           // Añadimos clase .voltear a cada card
+//           divCard.classList.add('voltear');
+//           const indexCard = divCard.getAttribute('data-index');
+//           const indexImgCard = imgCard.getAttribute('data-index');
+//           imgCard.src = carta.imagen;
+//           console.log(indexCard);
+//           console.log(indexImgCard);
+//           console.log(divCard);
+//         }
+//       });
+//       /*  */
+//     });
+//   } else {
+//     throw new Error('No se ha creado la estructura de las cartas');
+//   }
+//   return barajaDeCartasInicial;
+// };
