@@ -1,5 +1,4 @@
 import { cartas, Carta, tablero, Tablero } from './model';
-
 //Barajamos array duplicado
 const barajarCartas = (cartas: Carta[]): Carta[] => {
   const barajadoColeccionDeCartas = cartas.sort(() => Math.random() - 0.5);
@@ -8,48 +7,170 @@ const barajarCartas = (cartas: Carta[]): Carta[] => {
 export const cartasBarajadas = barajarCartas(cartas);
 console.table(cartasBarajadas);
 
-// Obtenemos el indice de la carta
-/* const obtenerIndiceCarta = (tablero: Tablero, cartaBuscada: Carta): number => {
-  return tablero.cartas.findIndex((carta) => carta === cartaBuscada);
-};
-const indice = obtenerIndiceCarta(tablero, tablero.cartas[0]); */
-/*  */
-/* const indiceCarta = (tablero: Tablero, cartaBuscada: Carta): number => {
-  const indice = tablero.cartas.findIndex(
-    (carta) =>
-      carta.estaVuelta === cartaBuscada.estaVuelta &&
-      carta.encontrada === cartaBuscada.encontrada
-  );
-  return indice;
-};
-const indice = indiceCarta(tablero, tablero.cartas[0]);
-console.warn(indice); */
-
 // Una carta se puede voltear si no está encontrada y no está ya volteada, o no hay dos cartas ya volteadas
 const sePuedeVoltearLaCarta = (tablero: Tablero, indice: number): boolean => {
-  const cartas = tablero.cartas;
-  const cartasVolteadas = cartas.filter((carta) => carta.estaVuelta).length;
-  // Verificamos si no hay dos cartas volteadas
-  const noHayDosCartasVolteadas = cartasVolteadas < 2;
-  // Verificamos si la carta no está encontrada y no está volteada
-  const carta = cartas[indice];
+  const carta = tablero.cartas[indice];
   const cartaNoEncontradaYNoVolteada = !carta.encontrada && !carta.estaVuelta;
-  // console.warn(cartaNoEncontradaYNoVolteada && noHayDosCartasVolteadas);
+  const noHayDosCartasVolteadas =
+    tablero.indiceCartaVolteadaA === undefined ||
+    tablero.indiceCartaVolteadaB === undefined;
   return cartaNoEncontradaYNoVolteada && noHayDosCartasVolteadas;
 };
-// sePuedeVoltearLaCarta(tablero, indice);
-// TODO
-/* const voltearLaCarta = (tablero: Tablero, indice: number): void => {
+
+const voltearLaCarta = (tablero: Tablero, indice: number): void => {
   if (sePuedeVoltearLaCarta(tablero, indice)) {
-    console.warn('Se puede voltear la carta');
-  } else {
-    console.warn('No se puede voltear la carta');
+    const carta = tablero.cartas[indice];
+    carta.estaVuelta = true;
+
+    if (tablero.indiceCartaVolteadaA === undefined) {
+      tablero.indiceCartaVolteadaA = indice;
+      tablero.estadoPartida = 'UnaCartaLevantada';
+    } else if (tablero.indiceCartaVolteadaB === undefined) {
+      tablero.indiceCartaVolteadaB = indice;
+      tablero.estadoPartida = 'DosCartasLevantadas';
+
+      if (
+        tablero.indiceCartaVolteadaA !== undefined &&
+        tablero.indiceCartaVolteadaB !== undefined
+      ) {
+        if (
+          sonPareja(
+            tablero.indiceCartaVolteadaA,
+            tablero.indiceCartaVolteadaB,
+            tablero
+          )
+        ) {
+          parejaEncontrada(
+            tablero,
+            tablero.indiceCartaVolteadaA,
+            tablero.indiceCartaVolteadaB
+          );
+        } else {
+          setTimeout(() => {
+            if (
+              tablero.indiceCartaVolteadaA !== undefined &&
+              tablero.indiceCartaVolteadaB !== undefined
+            ) {
+              parejaNoEncontrada(
+                tablero,
+                tablero.indiceCartaVolteadaA,
+                tablero.indiceCartaVolteadaB
+              );
+            }
+          }, 1000);
+        }
+      }
+
+      tablero.indiceCartaVolteadaA = undefined;
+      tablero.indiceCartaVolteadaB = undefined;
+      tablero.estadoPartida = 'CeroCartasLevantadas';
+    }
   }
 };
-voltearLaCarta(tablero, indice); */
+
+const sonPareja = (
+  indiceA: number,
+  indiceB: number,
+  tablero: Tablero
+): boolean => {
+  console.warn(
+    tablero.cartas[indiceA].idFoto === tablero.cartas[indiceB].idFoto
+  );
+  return tablero.cartas[indiceA].idFoto === tablero.cartas[indiceB].idFoto;
+};
+const parejaEncontrada = (
+  tablero: Tablero,
+  indiceA: number,
+  indiceB: number
+): void => {
+  tablero.cartas[indiceA].encontrada = true;
+  tablero.cartas[indiceB].encontrada = true;
+  // Aquí puedes añadir lógica adicional, como actualizar el estado del juego o mostrar un mensaje
+  console.warn('¡Pareja encontrada!');
+};
+
+const parejaNoEncontrada = (
+  tablero: Tablero,
+  indiceA: number,
+  indiceB: number
+): void => {
+  tablero.cartas[indiceA].estaVuelta = false;
+  tablero.cartas[indiceB].estaVuelta = false;
+  // Aquí puedes añadir lógica adicional, como actualizar el estado del juego o mostrar un mensaje
+};
+
+export const esPartidaCompleta = (tablero: Tablero): boolean => {
+  return tablero.cartas.every((carta) => carta.encontrada);
+};
+
+export const crearTableroInicial = (
+  cartasBarajadas: Carta[],
+  tablero: Tablero
+): Carta[] => {
+  const gridCartas = document.querySelector('.grid_cards');
+  let barajaDeCartasInicial: Carta[] = [];
+
+  if (
+    gridCartas !== null &&
+    gridCartas !== undefined &&
+    gridCartas instanceof HTMLDivElement
+  ) {
+    cartasBarajadas.forEach((carta, indice) => {
+      const dataIndiceArray = indice.toString();
+      const divCard = crearDiv();
+      divCard.classList.add('card');
+      const divBack = crearDiv();
+      divBack.classList.add('back');
+      const imgCard = crearImg();
+
+      // Creamos estructura de cada card
+      gridCartas.appendChild(divCard);
+      divCard.appendChild(divBack);
+      divBack.appendChild(imgCard);
+
+      divCard.addEventListener('click', () => {
+        if (sePuedeVoltearLaCarta(tablero, indice)) {
+          divCard.setAttribute('data-indice', dataIndiceArray);
+          imgCard.setAttribute('data-indice-image', dataIndiceArray);
+          voltearLaCarta(tablero, indice);
+          divCard.classList.add('voltear');
+          imgCard.src = carta.imagen;
+          console.log(
+            `Índice de la carta: ${divCard.getAttribute('data-indice')}`
+          );
+          console.log(
+            `Índice de la imagen: ${imgCard.getAttribute('data-indice-image')}`
+          );
+          console.log(divCard);
+          console.warn(carta);
+
+          // Comprobar si la partida está completa
+          if (esPartidaCompleta(tablero)) {
+            console.log('¡Partida completa!');
+          }
+        }
+      });
+
+      barajaDeCartasInicial.push(carta);
+    });
+  } else {
+    throw new Error('No se ha creado la estructura de las cartas');
+  }
+
+  return barajaDeCartasInicial;
+};
+export const iniciaPartida = (tablero: Tablero): void => {
+  tablero.cartas.forEach((carta) => {
+    carta.estaVuelta = false;
+    carta.encontrada = false;
+  });
+  tablero.indiceCartaVolteadaA = undefined;
+  tablero.indiceCartaVolteadaB = undefined;
+  tablero.estadoPartida = 'CeroCartasLevantadas';
+};
 
 // Obtener indice de cada carta
-const indiceCarta = (cartasBarajadas: Carta[]): number[] => {
+/* const indiceCarta = (cartasBarajadas: Carta[]): number[] => {
   let indices = cartasBarajadas.map((_carta, index) => {
     //console.log(`index${index}`);
     return index;
@@ -58,7 +179,7 @@ const indiceCarta = (cartasBarajadas: Carta[]): number[] => {
   return indices;
 };
 const indiceCard = indiceCarta(cartasBarajadas);
-console.log(indiceCard);
+console.log(indiceCard); */
 
 const crearDiv = (): HTMLDivElement => {
   const div = document.createElement('div');
@@ -69,77 +190,6 @@ const crearImg = (): HTMLImageElement => {
   const img = document.createElement('img');
   return img;
 };
-
-export const crearTableroConCartas = (cartasBarajadas: Carta[]): Carta[] => {
-  const gridCartas = document.querySelector('.grid_cards');
-  let barajaDeCartasInicial: Carta[] = [];
-  let indiceCarta: string;
-  if (
-    gridCartas !== null &&
-    gridCartas !== undefined &&
-    gridCartas instanceof HTMLDivElement
-  ) {
-    cartasBarajadas.map((carta, index) => {
-      /*  */
-      // Obetenemos indice de cada carta y lo convertimos a string
-      indiceCarta = index.toString();
-      // Creamos un div por cada carta
-      const divCard = crearDiv();
-      divCard.classList.add('card');
-      // Creamos dentro de .card el div.back que contiene la img
-      const divBack = crearDiv();
-      divBack.classList.add('back');
-      // Creamos el img dentro de .back
-      const imgCard = crearImg();
-      // Asignamos el index string como atributo a cada card
-      divCard.setAttribute('data-index', indiceCarta);
-      // Asignamos el index string como atributo a img dentro de .card
-      imgCard.setAttribute('data-index', indiceCarta);
-      // Creamos estructura de la card
-      gridCartas.appendChild(divCard);
-      divCard.appendChild(divBack);
-      divBack.appendChild(imgCard);
-      // Evento click sobre cada card
-      divCard.addEventListener('click', () => {
-        if (
-          sePuedeVoltearLaCarta(tablero, index) &&
-          tablero.estadoPartida === 'CeroCartasLevantadas'
-        ) {
-          // Añadimos clase .voltear a cada card
-          divCard.classList.add('voltear');
-          const indexCard = divCard.getAttribute('data-index');
-          const indexImgCard = imgCard.getAttribute('data-index');
-          imgCard.src = carta.imagen;
-          console.log(indexCard);
-          console.log(indexImgCard);
-          console.log(divCard);
-        }
-      });
-      /*  */
-    });
-  } else {
-    throw new Error('No se ha creado la estructura de las cartas');
-  }
-  return barajaDeCartasInicial;
-};
-
-// Btn empezar partida
-/* export const empezarPartida = (): void => {
-  const btnEmpezarPartida = document.querySelector('.empezar_partida');
-  if (
-    btnEmpezarPartida !== null &&
-    btnEmpezarPartida !== undefined &&
-    btnEmpezarPartida instanceof HTMLButtonElement
-  ) {
-    btnEmpezarPartida.addEventListener('click', () => {
-      crearDivsDeCarta(cartasBarajadas);
-      // Mostramos botón reiniciar partida
-      reiniciarPartida();
-    });
-  } else {
-    console.warn('No se iniciado la partida');
-  }
-}; */
 
 // Habilitar click en cartas una vez iniciada la partida
 const habilitarCartas = (): void => {
@@ -153,7 +203,7 @@ const habilitarCartas = (): void => {
 };
 
 // Cambia estado de la partida al iniciar la partida
-const empezarPartida = (): void => {
+export const empezarPartida = (): void => {
   const btnEmpezarPartida = document.querySelector('.empezar_partida');
   if (btnEmpezarPartida && btnEmpezarPartida instanceof HTMLButtonElement) {
     btnEmpezarPartida.addEventListener('click', () => {
@@ -193,8 +243,8 @@ export const reiniciarPartida = (): void => {
 };
 avisoIniciarPartida(); */
 // Eventos
-export const eventos = (): void => {
-  crearTableroConCartas(cartasBarajadas);
+/* export const eventos = (): void => {
+  crearTableroInicial(cartasBarajadas);
   tablero.estadoPartida === 'PartidaNoIniciada' ? empezarPartida() : null;
-};
+}; */
 console.warn(tablero);

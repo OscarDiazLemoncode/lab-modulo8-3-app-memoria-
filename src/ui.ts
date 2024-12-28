@@ -1,6 +1,8 @@
-//import {  } from './model';
-import { eventos } from './motor';
+import { tablero } from './model';
+import { cartasBarajadas, crearTableroInicial, empezarPartida } from './motor';
 
 document.addEventListener('DOMContentLoaded', () => {
-  eventos();
+  // eventos();
+  crearTableroInicial(cartasBarajadas, tablero);
+  tablero.estadoPartida === 'PartidaNoIniciada' ? empezarPartida() : null;
 });
