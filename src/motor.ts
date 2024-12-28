@@ -5,6 +5,7 @@ const barajarCartas = (cartas: Carta[]): Carta[] => {
   return barajadoColeccionDeCartas;
 };
 export const cartasBarajadas = barajarCartas(cartas);
+// export const cartasBarajadas = barajarCartas(tablero.cartas);
 console.table(cartasBarajadas);
 
 // Una carta se puede voltear si no está encontrada y no está ya volteada, o no hay dos cartas ya volteadas
@@ -61,9 +62,9 @@ const voltearLaCarta = (tablero: Tablero, indice: number): void => {
         }
       }
 
-      tablero.indiceCartaVolteadaA = undefined;
+      /* tablero.indiceCartaVolteadaA = undefined;
       tablero.indiceCartaVolteadaB = undefined;
-      tablero.estadoPartida = 'CeroCartasLevantadas';
+      tablero.estadoPartida = 'CeroCartasLevantadas'; */
     }
   }
 };
@@ -127,23 +128,14 @@ export const crearTableroInicial = (
       gridCartas.appendChild(divCard);
       divCard.appendChild(divBack);
       divBack.appendChild(imgCard);
-
       divCard.addEventListener('click', () => {
         if (sePuedeVoltearLaCarta(tablero, indice)) {
           divCard.setAttribute('data-indice', dataIndiceArray);
           imgCard.setAttribute('data-indice-image', dataIndiceArray);
           voltearLaCarta(tablero, indice);
-          divCard.classList.add('voltear');
           imgCard.src = carta.imagen;
-          console.log(
-            `Índice de la carta: ${divCard.getAttribute('data-indice')}`
-          );
-          console.log(
-            `Índice de la imagen: ${imgCard.getAttribute('data-indice-image')}`
-          );
-          console.log(divCard);
-          console.warn(carta);
-
+          divCard.classList.add('voltear');
+          console.warn(tablero);
           // Comprobar si la partida está completa
           if (esPartidaCompleta(tablero)) {
             console.log('¡Partida completa!');
@@ -156,9 +148,9 @@ export const crearTableroInicial = (
   } else {
     throw new Error('No se ha creado la estructura de las cartas');
   }
-
   return barajaDeCartasInicial;
 };
+
 export const iniciaPartida = (tablero: Tablero): void => {
   tablero.cartas.forEach((carta) => {
     carta.estaVuelta = false;
@@ -247,4 +239,3 @@ avisoIniciarPartida(); */
   crearTableroInicial(cartasBarajadas);
   tablero.estadoPartida === 'PartidaNoIniciada' ? empezarPartida() : null;
 }; */
-console.warn(tablero);
