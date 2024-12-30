@@ -1,14 +1,11 @@
 import { tablero } from './model';
-import {
-  /*  cartasBarajadas, */ crearTableroInicial,
-  empezarPartida,
-} from './motor';
+import { barajarCartas, crearTableroInicial, empezarPartida } from './motor';
 
 document.addEventListener('DOMContentLoaded', () => {
   // eventos();
-  // crearTableroInicial(cartasBarajadas, tablero);
+  barajarCartas(tablero.cartas);
+  console.table(tablero.cartas);
   crearTableroInicial(tablero.cartas);
   // tablero.estadoPartida === 'PartidaNoIniciada' ? empezarPartida() : null;
   empezarPartida();
-  console.warn(tablero.estadoPartida);
 });

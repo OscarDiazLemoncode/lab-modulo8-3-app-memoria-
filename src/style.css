@@ -147,3 +147,25 @@ img {
 .unstarted {
   opacity: 0.3;
 }
+.unstarted > .card:hover {
+  transform: rotateY(-30deg);
+  box-shadow: 4px 1px 12px 3px #a9a6a6;
+  cursor: not-allowed;
+}
+:not(.unstarted) > .card:hover {
+  box-shadow: 4px 1px 12px 3px #a9a6a6;
+}
+.card,
+.card:hover {
+  transition: all 0.3s ease-in-out;
+}
+.unstarted > .card:hover:before {
+  content: 'Inicia partida para jugar';
+  position: relative;
+  top: 30%;
+  color: #000;
+  font-size: 1.4rem;
+}
+.warning {
+  outline: 2px solid red;
+}
