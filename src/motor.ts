@@ -1,4 +1,6 @@
-import { /* cartas, */ Carta, tablero, Tablero } from './model';
+import { Carta, tablero, Tablero } from './model';
+let intentos: number = 0;
+
 //Barajamos array duplicado
 export const barajarCartas = (cartasTablero: Carta[]): Carta[] => {
   const barajadoColeccionDeCartas = cartasTablero.sort(
@@ -6,7 +8,6 @@ export const barajarCartas = (cartasTablero: Carta[]): Carta[] => {
   );
   return barajadoColeccionDeCartas;
 };
-// export const cartasBarajadas = barajarCartas(tablero.cartas);
 
 // Una carta se puede voltear si no está encontrada y no está ya volteada, o no hay dos cartas ya volteadas
 const sePuedeVoltearLaCarta = (tablero: Tablero, indice: number): boolean => {
@@ -93,7 +94,7 @@ const parejaEncontrada = (
 ): void => {
   tablero.cartas[indiceA].encontrada = true;
   tablero.cartas[indiceB].encontrada = true;
-  console.warn('¡Pareja encontrada!');
+  contadorDeIntentos(tablero);
 };
 
 const parejaNoEncontrada = (
@@ -107,6 +108,28 @@ const parejaNoEncontrada = (
 
 export const esPartidaCompleta = (tablero: Tablero): boolean => {
   return tablero.cartas.every((carta) => carta.encontrada);
+};
+
+// Contador de intentos
+const contadorDeIntentos = (tablero: Tablero): void => {
+  const mostrarContador = document.querySelector('.intentos');
+  if (
+    mostrarContador &&
+    mostrarContador instanceof HTMLParagraphElement &&
+    tablero.indiceCartaVolteadaA !== undefined &&
+    tablero.indiceCartaVolteadaB !== undefined
+  ) {
+    intentos++;
+    mostrarContador.innerText = `intentos: ${intentos}`;
+  }
+};
+
+// Mostrar mensaje de partida completa
+const mensajePartidaCompleta = (): void => {
+  const mensaje = document.querySelector('.partida_completa');
+  if (mensaje && mensaje instanceof HTMLHeadingElement) {
+    mensaje.textContent = '¡Juego ganado!';
+  }
 };
 
 export const crearTableroInicial = (cartasTablero: Carta[]): Carta[] => {
@@ -129,25 +152,27 @@ export const crearTableroInicial = (cartasTablero: Carta[]): Carta[] => {
       gridCartas.appendChild(divCarta);
 
       divCarta.addEventListener('click', () => {
-        if (tablero.cartas[indice].encontrada) {
-          divCarta.classList.add('warning');
-          setTimeout(() => divCarta.classList.remove('warning'), 1000);
-        }
+        tablero.cartas[indice].encontrada
+          ? (divCarta.classList.add('warning'),
+            setTimeout(() => divCarta.classList.remove('warning'), 1000))
+          : null;
 
         if (tablero.estadoPartida !== 'PartidaNoIniciada') {
           if (tablero.estadoPartida === 'PartidaCompleta') {
             return;
           }
-          const indice = parseInt(divCarta.getAttribute('data-indice')!);
+          const indice = Number(divCarta.getAttribute('data-indice'));
+
           if (sePuedeVoltearLaCarta(tablero, indice)) {
             voltearLaCarta(tablero, indice);
             imgCarta.src = carta.imagen;
             divCarta.classList.add('voltear');
+            contadorDeIntentos(tablero);
 
             // Comprobar si la partida está completa
             if (esPartidaCompleta(tablero)) {
               tablero.estadoPartida = 'PartidaCompleta';
-              console.log('¡Partida completa!');
+              mensajePartidaCompleta();
             }
           }
         } else {
@@ -220,23 +245,3 @@ export const reiniciarPartida = (): void => {
     });
   }
 };
-
-// Mostrar mensaje de iniciar partida
-export const avisoIniciarPartida = (): void => {
-  const gridCartas = document.querySelector('.grid_cards');
-  if (
-    gridCartas &&
-    gridCartas instanceof HTMLDivElement &&
-    tablero.estadoPartida === 'PartidaNoIniciada'
-  ) {
-    gridCartas.addEventListener('mouseover', () => {
-      console.log('Hay que iniciar partida primero');
-    });
-  }
-};
-
-// Eventos
-/* export const eventos = (): void => {
-  crearTableroInicial(cartasBarajadas);
-  tablero.estadoPartida === 'PartidaNoIniciada' ? empezarPartida() : null;
-}; */

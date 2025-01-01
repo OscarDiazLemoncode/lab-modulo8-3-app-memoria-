@@ -169,3 +169,12 @@ img {
 .warning {
   outline: 2px solid red;
 }
+.pareja {
+  outline: 2px solid rgb(30, 255, 0);
+}
+.botones_partida {
+  display: flex;
+  width: fit-content;
+  margin: 0 auto;
+  gap: 2rem;
+}
